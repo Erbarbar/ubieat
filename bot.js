@@ -1,10 +1,12 @@
 //var express    = require('express');
 const bodyParser = require('body-parser');
-const Slack      = require('slack-node');
-var Tesseract = require('tesseract.js'); // for image text recognition
-var request = require('request');
-var fs = require('fs');
+const Slack      = require('slack-node'); // to send messages to Slack
+const Tesseract = require('tesseract.js'); // for image text recognition
+const FB = require('fb'); // to get facebook images
+const request = require('request');
+const fs = require('fs'); // to be a ble to write a file
 
+// show or hide logs
 var logs = false;
 
 // point bot to slack channel
@@ -12,6 +14,13 @@ const bot_link = process.env.LINK; // no hack, pls
 const slack = new Slack();
 slack.setWebhook(bot_link); // the channel is defined on slack app settings
 
+// setup conection to Facebook REST API
+const fb_token = process.env.FB_TOKEN;
+var fb = new FB.Facebook();
+fb.setAccessToken(fb_token);
+
+//IPN facebook page id
+var ipn_id = "ipnbarcafetaria";
 
 //IPN menu image
 var url = "https://scontent.fopo2-1.fna.fbcdn.net/v/t1.0-9/35464654_1759158370816852_1085733037682982912_n.jpg?_nc_cat=0&oh=a9bd7f868dc5639d416aa380a5967078&oe=5BA595FF";
@@ -21,10 +30,17 @@ var url = "https://scontent.fopo2-1.fna.fbcdn.net/v/t1.0-9/35464654_175915837081
 var filename = "pic.png";
 
 
-
+fb.api(ipn_id, { fields: ['id', 'name'] }, function (res) {
+  if(!res || res.error) {
+    console.log(!res ? 'error occurred' : res.error);
+    return;
+  }
+  console.log(res.id);
+  console.log(res.name);
+});
 
 // download image
-downloadImage(url,filename);
+//downloadImage(url,filename);
 
 
 //testMessage(createMessageText());

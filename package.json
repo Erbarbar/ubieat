@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Erbarbar/ubieat#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "fb": "^2.0.0",
     "slack-node": "^0.1.8",
     "tesseract.js": "^1.0.10"
   }
